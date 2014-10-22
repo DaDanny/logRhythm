@@ -6,6 +6,16 @@ angular.module('logRhythmApp')
       .state('main', {
         url: '/',
         templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        resolve: {
+          StudentService : 'StudentService',
+          allStudents : function(StudentService){
+            return StudentService.getStudents()
+              .then(function(response){
+                return response;
+              })
+          }
+
+        }
       });
   });

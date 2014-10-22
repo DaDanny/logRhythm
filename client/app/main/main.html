@@ -1,7 +1,51 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+  <img src="https://www.logrhythm.com/Portals/_default/Skins/logrhythmV2-skins/images/logrhythm-blue.png">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>Students</h2>
+      <ul class="list-group">
+        <a no-href ng-click="addStudent()" class="list-group-item" ng-show="!newStudentEditor">
+          <span class="glyphicon glyphicon-user"></span>
+          &nbsp Add Student
+        </a>
+        <li ng-show="newStudentEditor" class="list-group-item">
+          <div class="row">
+            <form name="newStudentForm" class="simple-form" novalidate id="studentForm">
+              <div class="col-md-7">
+                <div class="form-group" ng-class ="{'has-error':badName && submittedName}">
+                  <label>Name: </label><input type = "text" focus-on="newStudentName" class="form-control" ng-model="newStudent.name" name="name" ng-required="true" ng-change = "submittedName = false" ng-blur="checkName(newStudent.name)">
+                  <p ng-show="badName && submittedName" class="help-block">Please enter a name</p>
+                </div><!--form-group-->
+              </div><!--col-md-8-->
+              <div class="col-md-3">
+                <div class="form-group" ng-class ="{'has-error':badGrade && submittedGrade}">
+                  <label>Grade: </label><input type="text" class="form-control" ng-model="newStudent.grade" ng-required = "true" ng-change = "submittedGrade = false" ng-blur="checkGrade(newStudent.grade)">
+                  <p ng-show="badGrade && submittedGrade" class="help-block">Grade must be integer between 0 and 100!</p>
+                </div><!--input-group-->
+              </div><!--col-sm-1-->
+            </form>
+            <div class="cancelBtn">
+              <span class="glyphicon glyphicon-ok" ng-click = "checkValues()"></span>
+              &nbsp
+              <span class="glyphicon glyphicon-remove" ng-click="cancelAdd()"></span>
+            </div>
+          </div><!--row-->
+        </li>
+        <li class="list-group-item" ng-class="{'failing':student.grade < 65}" ng-repeat='student in allStudents'>
+          {{student.name}}
+          <span >{{student.grade}}</span>
+          <span class="pull-right glyphicon glyphicon-trash" ng-click="deleteStudent(student)"></span>
+          &nbsp
+          <span class="pull-right glyphicon glyphicon-pencil"></span>
+        </li>
 
-<button class="btn btn-danger" ng-click="buildGraph()">Build</button>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <div class="ct-chart ct-minor-third"></div>
+    </div><!--col-md-8-->
+  </div><!--row-->
+</div><!--container-->
 
-<div class="ct-chart ct-minor-third"></div>
 
 
