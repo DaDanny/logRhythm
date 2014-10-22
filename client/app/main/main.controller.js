@@ -44,57 +44,93 @@ angular.module('logRhythmApp')
     $scope.addStudent = function(){
       // Displays New Student Editor
       $scope.newStudentEditor = true;
+      $scope.edited = '';
+      $scope.studentToEdit = '';
 
       // Sets focus for focus on directive
-      $scope.newStudentName=true
+      $scope.focusNewName=true
 
-      $scope.badGrade = true;
+      //$scope.badGrade = true;
       $scope.submittedGrade = false;
+      $scope.submittedName = false;
     }
 
-    $scope.checkName = function(name){
+    $scope.checkName = function(student,type){
+      console.log('name', student)
       $scope.submittedName = true;
-      if(typeof name != "string"){
+      if(student != undefined){
+        if(typeof student.name != "string"){
+          $scope.badName = true;
+        }
+        else{
+          $scope.badName = false;
+        }
+        $scope.focusNewGrade = true;
+      }  
+      else{
         $scope.badName = true;
       }
-      else{
-        $scope.badName = false;
-      }
-
-      //$scope.checkValues()
     }
 
-    $scope.checkGrade = function(grade){
+    $scope.checkGrade = function(student,type){
       $scope.submittedGrade = true;
-      if(grade > 100 || grade < 0) {
-        console.log('here');
-        $scope.badGrade = true;
-      }
-      else if(grade == '' || grade == undefined){
-        $scope.badGrade = true;
+      if(student != undefined){
+        if(isNaN(student.grade)){
+          $scope.badGrade = true;
+        }
+        else if(student.grade > 100 || student.grade < 0) {
+          $scope.badGrade = true;
+        }
+        else if(student.grade == '' || student.grade == undefined){
+          $scope.badGrade = true;
+        }
+        else{
+          $scope.badGrade = false;
+        }
+        console.log('gradechck:', student)
       }
       else{
-        $scope.badGrade = false;
+        $scope.badGrade = true;
       }
-      //$scope.checkValues();
     }
 
-    $scope.checkValues = function(){
-      if($scope.submittedGrade == false){
-        $scope.submittedGrade = true;
-      }
-      if(!$scope.badName && !$scope.badGrade){
-        StudentService.addStudent($scope.newStudent)
-          .then(function(response){
-            var newStudent = response.studentObj();
-            $scope.newStudentEditor = false;
-            $scope.newStudent = {};
-            $scope.allStudents.unshift(newStudent);
-            $scope.buildGraph();
-
-            console.log('add response:',response.studentObj() )
-          })
-      }
+    $scope.checkValues = function(student, type){
+      console.log('student: ', student);
+        if(!$scope.submittedName){
+          $scope.checkName(student, type); 
+        }
+        if(!$scope.submittedGrade && $scope.submittedName){
+          $scope.checkGrade(student,type);
+        }
+        if(!$scope.badGrade && !$scope.badName && type=='new'){
+          console.log('save!');
+          StudentService.addStudent($scope.newStudent)
+            .then(function(response){
+              var newStudent = response.studentObj();
+              $scope.newStudentEditor = false;
+              $scope.newStudent = {};
+              $scope.allStudents.unshift(newStudent);
+              $scope.buildGraph();
+            })
+        }
+        else if(!$scope.badGrade && !$scope.badName && type=='edit'){
+          console.log('edit');
+          var editedStudent = {
+            name : student.name,
+            grade : student.grade,
+            _id : $scope.studentToEdit
+          }
+          StudentService.editStudent(editedStudent)
+            .then(function(response){
+              var update = response.studentObj();
+              var index = $scope.allStudents.indexOf($scope.oldStudent);
+              console.log('index: ' ,index);
+              $scope.allStudents[index] = update;
+              console.log(response.studentObj());
+              $scope.studentToEdit = '';
+              $scope.buildGraph();
+            })
+        }
     }
 
     $scope.cancelAdd = function(){
@@ -103,6 +139,10 @@ angular.module('logRhythmApp')
       $scope.newStudentEditor= false;
       $scope.badName = false;
       $scope.submittedGrade = false;
+    }
+
+    $scope.cancelEdit = function(){
+      $scope.studentToEdit = '';
     }
 
     $scope.deleteStudent = function(student){
@@ -114,6 +154,20 @@ angular.module('logRhythmApp')
         })
     }
 
-   
+    $scope.editStudent = function(student){
+      $scope.oldStudent = student;
+      $scope.submittedGrade = false;
+      $scope.submittedName = false;
+      $scope.newStudentEditor = false;
+
+      $scope.studentToEdit = student._id;
+      $scope.edited = {
+        name : student.name,
+        grade : student.grade
+      };
+
+      $scope.editStudentName = true;
+      $scope.focusNewName = false;
+    }
 
   });

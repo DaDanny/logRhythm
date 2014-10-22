@@ -80,7 +80,6 @@ angular.module('logRhythmApp')
       deleteStudent : function(studentObj){
         return $http.delete('/api/students/' + studentObj._id)
           .then(function(response){
-            console.log(response)
             return response;
           })
       }

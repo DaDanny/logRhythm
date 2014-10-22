@@ -10,35 +10,59 @@
         </a>
         <li ng-show="newStudentEditor" class="list-group-item">
           <div class="row">
-            <form name="newStudentForm" class="simple-form" novalidate id="studentForm">
+            <form name="newStudentForm" class="simple-form" novalidate id="studentForm" ng-submit="checkValues(newStudent, 'new')">
               <div class="col-md-7">
-                <div class="form-group" ng-class ="{'has-error':badName && submittedName}">
-                  <label>Name: </label><input type = "text" focus-on="newStudentName" class="form-control" ng-model="newStudent.name" name="name" ng-required="true" ng-change = "submittedName = false" ng-blur="checkName(newStudent.name)">
+                <div class="form-group" ng-class ="{'has-error':badName && submittedName}" >
+                  <label>Name: </label><input type = "text" focus-on="focusNewName" class="form-control" ng-model="newStudent.name" name="name" ng-required="true" ng-change = "submittedName = false" ng-blur="checkName(newStudent,'new')" ng-value = "">
                   <p ng-show="badName && submittedName" class="help-block">Please enter a name</p>
                 </div><!--form-group-->
               </div><!--col-md-8-->
               <div class="col-md-3">
                 <div class="form-group" ng-class ="{'has-error':badGrade && submittedGrade}">
-                  <label>Grade: </label><input type="text" class="form-control" ng-model="newStudent.grade" ng-required = "true" ng-change = "submittedGrade = false" ng-blur="checkGrade(newStudent.grade)">
+                  <label>Grade: </label><input type="text" class="form-control" ng-model="newStudent.grade" ng-required = "true" ng-change = "submittedGrade = false" ng-blur="checkGrade(newStudent,'new')" ng-value="" focus-on="focusNewGrade">
                   <p ng-show="badGrade && submittedGrade" class="help-block">Grade must be integer between 0 and 100!</p>
                 </div><!--input-group-->
               </div><!--col-sm-1-->
+              <input type="submit" class="enterBtn"/>
             </form>
             <div class="cancelBtn">
-              <span class="glyphicon glyphicon-ok" ng-click = "checkValues()"></span>
+              <span class="glyphicon glyphicon-ok" ng-click = "checkValues(newStudent, 'new')"></span>
               &nbsp
               <span class="glyphicon glyphicon-remove" ng-click="cancelAdd()"></span>
             </div>
           </div><!--row-->
         </li>
-        <li class="list-group-item" ng-class="{'failing':student.grade < 65}" ng-repeat='student in allStudents'>
-          {{student.name}}
-          <span >{{student.grade}}</span>
-          <span class="pull-right glyphicon glyphicon-trash" ng-click="deleteStudent(student)"></span>
-          &nbsp
-          <span class="pull-right glyphicon glyphicon-pencil"></span>
+        <li class="list-group-item" ng-class="{'failing':student.grade < 65}" ng-repeat='student in allStudents' >
+          <div ng-show="student._id != studentToEdit">
+            {{student.name}}
+            <span >{{student.grade}}</span>
+            <span class="pull-right glyphicon glyphicon-trash" ng-click="deleteStudent(student)"></span>
+            &nbsp
+            <span class="pull-right glyphicon glyphicon-pencil" ng-click="editStudent(student)"></span>
+          </div>
+          <div class="row">
+            <form name="editStudentForm" class="simple-form" novalidate id="editStudentForm" ng-show="student._id == studentToEdit" ng-submit="checkValues(edited, 'edit')">
+              <div class="col-md-7">
+                <div class="form-group" ng-class ="{'has-error':badName && $parent.submittedName}">
+                  <label>Name: </label><input type = "text" focus-on="editStudentName" class="form-control" ng-model="edited.name" name="name" ng-required="true" ng-change = "$parent.submittedName = false" ng-blur="checkName(edited)">
+                    <p ng-show="badName && $parent.submittedName" class="help-block">Please enter a name</p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group" ng-class ="{'has-error':badGrade && $parent.submittedGrade}">
+                  <label>Grade: </label><input type="text" class="form-control" ng-model="edited.grade" ng-required = "true" ng-change = "$parent.submittedGrade = false" ng-blur="checkGrade(edited)">
+                  <p ng-show="badGrade && $parent.submittedGrade" class="help-block">Grade must be integer between 0 and 100!</p>
+                </div>
+              </div>
+              <input type="submit" class="enterBtn"/>
+            </form>
+            <div class="cancelBtn" ng-show="student._id == studentToEdit">
+              <span class="glyphicon glyphicon-ok" ng-click = "checkValues(edited, 'edit')"></span>
+              &nbsp
+              <span class="glyphicon glyphicon-remove" ng-click="cancelEdit()"></span>
+            </div>
+          </div>
         </li>
-
       </ul>
     </div>
     <div class="col-md-8">

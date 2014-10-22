@@ -79,3 +79,10 @@ body{
 .failing{
     background-color: red;
 }
+
+.enterBtn{
+    position: absolute; 
+    left: -9999px; 
+    width: 1px; 
+    height: 1px;
+}
