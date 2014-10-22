@@ -1,22 +1,17 @@
 'use strict';
 
 angular.module('logRhythmApp')
-  .controller('MainCtrl', function ($scope, $http) {
-    $scope.awesomeThings = [];
-
-    $http.get('/api/things').success(function(awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
-    });
-
-    $scope.addThing = function() {
-      if($scope.newThing === '') {
-        return;
-      }
-      $http.post('/api/things', { name: $scope.newThing });
-      $scope.newThing = '';
+  .controller('MainCtrl', function ($scope, StudentService) {
+    StudentService.getStudents()
+      .then(function(response){
+        console.log(response);
+      })
+    var student = {
+      name : 'Danny Francken',
+      grade : 70
     };
-
-    $scope.deleteThing = function(thing) {
-      $http.delete('/api/things/' + thing._id);
-    };
+    StudentService.addStudent(student)
+      .then(function(response){
+        console.log(response.studentObj());
+      })
   });
