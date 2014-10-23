@@ -1,7 +1,9 @@
 <div class="container">
-  <img src="https://www.logrhythm.com/Portals/_default/Skins/logrhythmV2-skins/images/logrhythm-blue.png" id = "logo">
+  <!-- <img src="https://www.logrhythm.com/Portals/_default/Skins/logrhythmV2-skins/images/logrhythm-blue.png" id = "logo"> -->
+  <h1>The <b>Grade</b>book</h1>
+  <h4>A <b>responsive</b> web app for <b>LogRhythm</b> developed by <b>Danny Francken</b> <a id='github' href="https://github.com/DaDanny/logRhythm">Github Repo <i class="fa fa-github"></i></h4></a>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-4">
       <h2>Students</h2>
       <ul class="list-group">
         <a no-href ng-click="addStudent()" class="list-group-item" ng-show="!newStudentEditor">
@@ -38,6 +40,7 @@
               <span >{{student.name}}</span>
               <br>
               <span ng-show="student.grade < 65" class='failingWarning'><i>Failing</i></span>
+              <span ng-hide="student.grade < 65" class='failingWarning'><i>Passing</i></span>
             </div>
             <span class="pull-right glyphicon glyphicon-trash" ng-click="deleteStudent(student)"></span>
             <span class="pull-right glyphicon glyphicon-pencil" ng-click="editStudent(student)"></span>
@@ -69,7 +72,7 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-8">
+    <div class="col-sm-8">
       <h2>Grade Report</h2>
       <h3>
         Average: <b>{{average | number:2}}</b>
