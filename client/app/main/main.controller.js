@@ -63,7 +63,18 @@ angular.module('logRhythmApp')
         seriesBarDistance : 0
       }
 
-      new Chartist.Bar('.ct-chart', data, options);
+      var responsiveOptions = [
+        ['screen and (max-width: 640px)', {
+          seriesBarDistance: 5,
+          axisX: {
+            labelInterpolationFnc: function (value) {
+              return (value[0]+value[1]+value[2]+value[3]);
+            }
+          }
+        }]
+      ];
+
+      new Chartist.Bar('.ct-chart', data, options,responsiveOptions);
     };
 
     $scope.buildGraph();

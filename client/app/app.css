@@ -168,8 +168,19 @@ a.list-group-item:hover {
 
 @media (max-width: 420px){
     #github{
-        margin-top: 8px;
+        margin-top: 18px;
         color:white;
         float:left;
+    }
+    .ct-chart .ct-label {
+        fill: white;
+        font-size: .3rem;
+    }
 }
+
+@media (max-width: 500px){
+    .ct-chart .ct-label {
+        fill: white;
+        font-size: .4rem;
+    }
 }
