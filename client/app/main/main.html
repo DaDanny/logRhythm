@@ -1,5 +1,5 @@
 <div class="container">
-  <img src="https://www.logrhythm.com/Portals/_default/Skins/logrhythmV2-skins/images/logrhythm-blue.png">
+  <img src="https://www.logrhythm.com/Portals/_default/Skins/logrhythmV2-skins/images/logrhythm-blue.png" id = "logo">
   <div class="row">
     <div class="col-md-4">
       <h2>Students</h2>
@@ -34,11 +34,15 @@
         </li>
         <li class="list-group-item" ng-class="{'failing':student.grade < 65}" ng-repeat='student in allStudents' >
           <div ng-show="student._id != studentToEdit">
-            {{student.name}}
-            <span >{{student.grade}}</span>
+            <div id='leftSide'>
+              <span >{{student.name}}</span>
+              <br>
+              <span ng-show="student.grade < 65" class='failingWarning'><i>Failing</i></span>
+            </div>
             <span class="pull-right glyphicon glyphicon-trash" ng-click="deleteStudent(student)"></span>
-            &nbsp
             <span class="pull-right glyphicon glyphicon-pencil" ng-click="editStudent(student)"></span>
+            <br>
+            <span class="grade pull-right">Grade: <b>{{student.grade}}</b></span>
           </div>
           <div class="row">
             <form name="editStudentForm" class="simple-form" novalidate id="editStudentForm" ng-show="student._id == studentToEdit" ng-submit="checkValues(edited, 'edit')">
@@ -59,14 +63,21 @@
             <div class="cancelBtn" ng-show="student._id == studentToEdit">
               <span class="glyphicon glyphicon-ok" ng-click = "checkValues(edited, 'edit')"></span>
               &nbsp
-              <span class="glyphicon glyphicon-remove" ng-click="cancelEdit()"></span>
+              <span class="glyphicon glyphicon-remove" ng-click="cancelEdit()" style="color:white;"></span>
             </div>
           </div>
         </li>
       </ul>
     </div>
     <div class="col-md-8">
-      <div class="ct-chart ct-minor-third"></div>
+      <h2>Grade Report</h2>
+      <h3>
+        Average: <b>{{average | number:2}}</b>
+        Max: <b>{{maxGrade}}</b>
+        Min: <b>{{minGrade}}</b>
+      </h3>
+
+      <div class="ct-chart ct-minor-sixth"></div>
     </div><!--col-md-8-->
   </div><!--row-->
 </div><!--container-->
