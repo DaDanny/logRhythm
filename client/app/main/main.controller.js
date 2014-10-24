@@ -20,29 +20,32 @@ angular.module('logRhythmApp')
     $scope.buildGraph = function(){
       var labelArray = [];
       var seriesArray = [];
-      $scope.minGrade = $scope.allStudents[0].grade;
-      $scope.maxGrade = $scope.allStudents[0].grade;
-      $scope.average = 0;
-      var total = 0;
-      for(var student in $scope.allStudents){
-        labelArray.push($scope.allStudents[student].name);
-        seriesArray.push($scope.allStudents[student].grade);
-        total += $scope.allStudents[student].grade;
-        if($scope.minGrade > $scope.allStudents[student].grade){
-          $scope.minGrade = $scope.allStudents[student].grade;
+      if($scope.allStudents.length > 0){
+        $scope.minGrade = $scope.allStudents[0].grade;
+        $scope.maxGrade = $scope.allStudents[0].grade;
+        $scope.average = 0;
+        var total = 0;
+        for(var student in $scope.allStudents){
+          labelArray.push($scope.allStudents[student].name);
+          seriesArray.push($scope.allStudents[student].grade);
+          total += $scope.allStudents[student].grade;
+          if($scope.minGrade > $scope.allStudents[student].grade){
+            $scope.minGrade = $scope.allStudents[student].grade;
+          }
+          if($scope.maxGrade < $scope.allStudents[student].grade){
+            $scope.maxGrade = $scope.allStudents[student].grade;
+          }
         }
-        if($scope.maxGrade < $scope.allStudents[student].grade){
-          $scope.maxGrade = $scope.allStudents[student].grade;
-        }
-      }
 
-      $scope.average = (total / $scope.allStudents.length)
-      var data = {
-        labels: labelArray,
-        series:[
-          seriesArray
-        ]
-      };
+        $scope.average = (total / $scope.allStudents.length)
+        var data = {
+          labels: labelArray,
+          series:[
+            seriesArray
+          ]
+        };
+      }
+      
 
       // Options for the layout of graph
       var options = {
